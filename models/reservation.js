@@ -41,16 +41,14 @@ class Reservation {
 
   async save() {
     if (this.id === undefined) {
-      // New reservation: Insert into the database
       const result = await db.query(
         `INSERT INTO reservations (customer_id, start_at, num_guests, notes)
          VALUES ($1, $2, $3, $4)
-         RETURNING id`, // Return the new id for this reservation
+         RETURNING id`,
         [this.customerId, this.startAt, this.numGuests, this.notes]
       );
-      this.id = result.rows[0].id; // Set the new id to this instance
+      this.id = result.rows[0].id;
     } else {
-      // Existing reservation: Update the record in the database
       await db.query(
         `UPDATE reservations
          SET customer_id=$1, start_at=$2, num_guests=$3, notes=$4
